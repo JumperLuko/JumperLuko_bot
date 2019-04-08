@@ -42,17 +42,17 @@ client.on("message", async message =>{
         return message.content.includes(keyWord);
     }
 
-    if(comando === "!help"){
-        await message.channel.send("!calc para calculos, !ping para pingar");
-    }else if(comando === "!ping") {
+    if(comando === "j!help"  || comando === "!help" || message.channel.type == "dm" && (comando === "help"|| comando === "ajuda")){
+        await message.channel.send("j!calc p/ Cálculos \r\nj!ping p/ Pingar \r\nj!info p/ Informações");
+    }else if(comando === "j!ping") {
         console.log(message.author.username+" use !ping");
-        // await message.delete();
+        if(message.channel.type != "dm") {await message.delete();};
         const m = await message.channel.send("Ping?");
-        await m.edit(`Pong! A latência é ${m.createdTimestamp - message.createdTimestamp}ms. A latencia  da API é ${Math.round(client.ping)}ms`);
-    }else if(comando === "!calc"){
-        if(message.content.toLowerCase() != "!calc"){
-            console.log(message.author.username+" use !calc");
-            const calc = message.content.toLowerCase().split("!calc ").reverse().shift();
+        await m.edit(`Pong! A latência é ${m.createdTimestamp - message.createdTimestamp}ms. A latencia  da API é ${Math.round(client.ping)}ms. Req by `+message.author.username);
+    }else if(comando === "j!calc"){
+        if(message.content.toLowerCase() != "j!calc"){
+            console.log(message.author.username+" use j!calc");
+            const calc = message.content.toLowerCase().split("j!calc ").reverse().shift();
             var calcArray = calc.toLowerCase().split('');
             function erroIdentificado(erro,correcao){
                 message.channel.send("Por favor mude '"+erro+"' para '"+correcao+"'. Só +1 vez corrigirei.");
@@ -63,7 +63,7 @@ client.on("message", async message =>{
                 return;
             }
             for(var i=0; i < calcArray.length; i++){
-                if((calcArray[i]=="+" || calcArray[i]=="-" || calcArray[i]=="*" || calcArray[i]=="/" || calcArray[i]=="%" || calcArray[i]=="0" || calcArray[i]=="1" || calcArray[i]=="2" || calcArray[i]=="3" || calcArray[i]=="4" || calcArray[i]=="5" || calcArray[i]=="6" || calcArray[i]=="7" || calcArray[i]=="8" || calcArray[i]=="9") && calc.length <20){ //includes("x")
+                if((calcArray[i]=="+" || calcArray[i]=="-" || calcArray[i]=="*" || calcArray[i]=="/" || calcArray[i]=="%" || calcArray[i]=="0" || calcArray[i]=="1" || calcArray[i]=="2" || calcArray[i]=="3" || calcArray[i]=="4" || calcArray[i]=="5" || calcArray[i]=="6" || calcArray[i]=="7" || calcArray[i]=="8" || calcArray[i]=="9") && calc.length <20){
                     if(calcArray[i]=="+" || calcArray[i]=="-" || calcArray[i]=="*" || calcArray[i]=="/" || calcArray[i]=="%"){
                         if(calcArray[i]==lastCalcArray){
                             if(calcArray[i]!="*"){
@@ -98,9 +98,22 @@ client.on("message", async message =>{
             }
             await message.channel.send(eval(calcArray.join(""))); //If end with +? Verifica na linha de cima se o ultimo valor do array é um agregador aritimetico
         }else{
-            console.log(message.author.username+" use !calc NULL");
+            console.log(message.author.username+" use j!calc NULL");
             await message.channel.send("Aqui você pode calcular valores!");
         }
+    }else if(comando === "j!info"){
+        if(message.channel.type == "dm") {message.channel.send("Comando para servidores");return;};
+        let sicon = message.guild.iconURL;
+        let serverembed = new Discord.RichEmbed()
+        .setDescription("Informações do servidor")
+        .setColor("#15f153")
+        .setThumbnail(sicon)
+        .addField("Nome do server", message.guild.name)
+        .addField("Criado em", message.guild.createdAt)
+        .addField("Você entrou em", message.member.joinedAt)
+        .addField("Total de pessoas", message.guild.memberCount);
+        message.delete();
+        return message.channel.send(serverembed);
     }else if(chamado("JumperLuko_bot") === true){
         console.log(message.author.username+" call me");
         await message.channel.send("Oi to aqui");
