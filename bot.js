@@ -12,9 +12,9 @@ function atividade(){
     }
 }
 
-// Evento ao ligar Bot
+// On turn on Bot
 client.on("ready", () => {
-    console.log(`Olá mundo, bot iniciado com ${client.users.size} usuários, em ${client.channels.size} canais, em ${client.guilds.size} servidores.`);
+    console.log(`Bot iniciado com ${client.users.size} usuários, em ${client.channels.size} canais, em ${client.guilds.size} servidores.`);
     atividade();
 });
 
@@ -30,26 +30,24 @@ client.on("guildDelete", guild =>{
     atividade();
 });
 
-// On massage
+// On message
 client.on("message", async message =>{
     if(message.author.bot) return;
-    // if(message.channel.type == "dm") return;
+    // if (!message.guild) return;
 
-    const mensagem = message.content;
-    const args = mensagem.slice(config.prefix.lenght).trim().split(/ +/g);
-    const comando = args.shift().toLowerCase();
+    const comand = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
     function chamado(keyWord){
         return message.content.includes(keyWord);
     }
 
-    if(comando === "j!help"  || comando === "!help" || message.channel.type == "dm" && (comando === "help"|| comando === "ajuda")){
+    if(comand === "j!help"  || comand === "!help" || message.channel.type == "dm" && (comand === "help"|| comand === "ajuda")){
         await message.channel.send("j!calc p/ Cálculos \r\nj!ping p/ Pingar \r\nj!info p/ Informações");
-    }else if(comando === "j!ping") {
+    }else if(comand === "j!ping") {
         console.log(message.author.username+" use !ping");
         if(message.channel.type != "dm") {await message.delete();};
         const m = await message.channel.send("Ping?");
         await m.edit(`Pong! A latência é ${m.createdTimestamp - message.createdTimestamp}ms. A latencia  da API é ${Math.round(client.ping)}ms. Req by `+message.author.username);
-    }else if(comando === "j!calc"){
+    }else if(comand === "j!calc"){
         if(message.content.toLowerCase() != "j!calc"){
             console.log(message.author.username+" use j!calc");
             const calc = message.content.toLowerCase().split("j!calc ").reverse().shift();
@@ -101,8 +99,8 @@ client.on("message", async message =>{
             console.log(message.author.username+" use j!calc NULL");
             await message.channel.send("Aqui você pode calcular valores!");
         }
-    }else if(comando === "j!info"){
-        if(message.channel.type == "dm") {message.channel.send("Comando para servidores");return;};
+    }else if(comand === "j!info"){
+        if(!message.guild) {message.channel.send("Comand para servidores");return;};
         let sicon = message.guild.iconURL;
         let serverembed = new Discord.RichEmbed()
         .setDescription("Informações do servidor")
