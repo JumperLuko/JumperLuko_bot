@@ -35,19 +35,17 @@ client.on("message", async message =>{
     if(message.author.bot) return;
     // if (!message.guild) return;
 
-    const comand = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
-    function chamado(keyWord){
-        return message.content.includes(keyWord);
-    }
+    function command(keyWord){return message.content.startsWith(keyWord);} // const command = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
+    function call(keyWord){return message.content.includes(keyWord);}
 
-    if(comand === "j!help"  || comand === "!help" || message.channel.type == "dm" && (comand === "help"|| comand === "ajuda")){
+    if(command("j!help")  || command("!help") || message.channel.type == "dm" && (command("help")|| command("ajuda"))){
         await message.channel.send("j!calc p/ Cálculos \r\nj!ping p/ Pingar \r\nj!info p/ Informações");
-    }else if(comand === "j!ping") {
+    }else if(command("j!ping")) {
         console.log(message.author.username+" use !ping");
         if(message.channel.type != "dm") {await message.delete();};
         const m = await message.channel.send("Ping?");
         await m.edit(`Pong! A latência é ${m.createdTimestamp - message.createdTimestamp}ms. A latencia  da API é ${Math.round(client.ping)}ms. Req by `+message.author.username);
-    }else if(comand === "j!calc"){
+    }else if(command("j!calc")){
         if(message.content.toLowerCase() != "j!calc"){
             console.log(message.author.username+" use j!calc");
             const calc = message.content.toLowerCase().split("j!calc ").reverse().shift();
@@ -99,8 +97,8 @@ client.on("message", async message =>{
             console.log(message.author.username+" use j!calc NULL");
             await message.channel.send("Aqui você pode calcular valores!");
         }
-    }else if(comand === "j!info"){
-        if(!message.guild) {message.channel.send("Comand para servidores");return;};
+    }else if(command("j!info")){
+        if(!message.guild) {message.channel.send("Command para servidores");return;};
         let sicon = message.guild.iconURL;
         let serverembed = new Discord.RichEmbed()
         .setDescription("Informações do servidor")
@@ -112,7 +110,7 @@ client.on("message", async message =>{
         .addField("Total de pessoas", message.guild.memberCount);
         message.delete();
         return message.channel.send(serverembed);
-    }else if(chamado("JumperLuko_bot") === true){
+    }else if(call("JumperLuko_bot") === true){
         console.log(message.author.username+" call me");
         await message.channel.send("Oi to aqui");
     }
