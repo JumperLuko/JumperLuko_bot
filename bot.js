@@ -31,7 +31,7 @@ client.on("message", async message =>{
     if(message.author.bot) return;
     // if (!message.guild) return;
 
-    // console.log(message.guild.roles.names);
+    console.log(message.member.roles.map(role => role.name.toString()).join(" || "));
     const command = (keyWord) => message.content.toLowerCase().startsWith(keyWord); // const command = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
     function call(keyWord){return message.content.toLowerCase().includes(keyWord);}
 
