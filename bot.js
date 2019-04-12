@@ -31,7 +31,7 @@ client.on("message", async message =>{
     if(message.author.bot) return;
     // if (!message.guild) return;
 
-    // console.log();
+    // console.log(message.guild.roles.names);
     const command = (keyWord) => message.content.toLowerCase().startsWith(keyWord); // const command = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
     function call(keyWord){return message.content.toLowerCase().includes(keyWord);}
 
@@ -108,7 +108,7 @@ client.on("message", async message =>{
         .addField("Total de pessoas", message.guild.memberCount);
         message.delete();
         return message.channel.send(serverembed);
-    }else if(call("jumperluko_bot") === true){
+    }else if(call("jumperluko_bot")){
         console.log(message.author.username+"#"+message.author.discriminator+" call me");
         if(typeof callMeAgain === 'undefined'){
             callMeAgain = [message.author.id];
@@ -118,7 +118,6 @@ client.on("message", async message =>{
         }else if(callMeAgain.includes(message.author.id)){
             await message.channel.send("Olá estou aqui....");
         }
-        
     }
 });
 
