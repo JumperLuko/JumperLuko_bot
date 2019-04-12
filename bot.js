@@ -1,4 +1,4 @@
-//Bot de JumperLuko, jumper.luko@gmail.com
+// ~ Bot de JumperLuko, jumper.luko@gmail.com
 
 const Discord = require("discord.js");
 const client = new Discord.Client();
@@ -12,42 +12,40 @@ function atividade(){
     }
 }
 
-// On turn on Bot
-client.on("ready", () => {
+client.once("ready", () => {
     console.log(`Bot iniciado com ${client.users.size} usuários, em ${client.channels.size} canais, em ${client.guilds.size} servidores.`);
     atividade();
 });
 
-// On put to server
 client.on("guildCreate", guild =>{
     console.log(`O bot entrou no servidor: ${guild.name} (id: ${guild.id}). população: ${guild.memberCount} membros!`);
     atividade();
 });
 
-// On delete to server
 client.on("guildDelete", guild =>{
     console.log(`O bot foi removido do servidor: ${guild.name} (id: ${guild.id})`);
     atividade();
 });
 
-// On message
 client.on("message", async message =>{
     if(message.author.bot) return;
     // if (!message.guild) return;
 
-    function command(keyWord){return message.content.startsWith(keyWord);} // const command = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
-    function call(keyWord){return message.content.includes(keyWord);}
+    // console.log();
+    const command = (keyWord) => message.content.toLowerCase().startsWith(keyWord); // const command = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
+    function call(keyWord){return message.content.toLowerCase().includes(keyWord);}
 
     if(command("j!help")  || command("!help") || message.channel.type == "dm" && (command("help")|| command("ajuda"))){
+        console.log(message.author.username+"#"+message.author.discriminator+" use !help");
         await message.channel.send("j!calc p/ Cálculos \r\nj!ping p/ Pingar \r\nj!info p/ Informações");
     }else if(command("j!ping")) {
-        console.log(message.author.username+" use !ping");
+        console.log(message.author.username+"#"+message.author.discriminator+" use !help");
         if(message.channel.type != "dm") {await message.delete();};
         const m = await message.channel.send("Ping?");
         await m.edit(`Pong! A latência é ${m.createdTimestamp - message.createdTimestamp}ms. A latencia  da API é ${Math.round(client.ping)}ms. Req by `+message.author.username);
     }else if(command("j!calc")){
         if(message.content.toLowerCase() != "j!calc"){
-            console.log(message.author.username+" use j!calc");
+            console.log(message.author.username+"#"+message.author.discriminator+" use j!calc");
             const calc = message.content.toLowerCase().split("j!calc ").reverse().shift();
             var calcArray = calc.toLowerCase().split('');
             function erroIdentificado(erro,correcao){
@@ -94,7 +92,7 @@ client.on("message", async message =>{
             }
             await message.channel.send(eval(calcArray.join(""))); //If end with +? Verifica na linha de cima se o ultimo valor do array é um agregador aritimetico
         }else{
-            console.log(message.author.username+" use j!calc NULL");
+            console.log(message.author.username+"#"+message.author.discriminator+" use j!calc NULL");
             await message.channel.send("Aqui você pode calcular valores!");
         }
     }else if(command("j!info")){
@@ -104,15 +102,23 @@ client.on("message", async message =>{
         .setDescription("Informações do servidor")
         .setColor("#15f153")
         .setThumbnail(sicon)
-        .addField("Nome do server", message.guild.name)
+        .addField("Server Name", message.guild.name)
         .addField("Criado em", message.guild.createdAt)
         .addField("Você entrou em", message.member.joinedAt)
         .addField("Total de pessoas", message.guild.memberCount);
         message.delete();
         return message.channel.send(serverembed);
-    }else if(call("JumperLuko_bot") === true){
-        console.log(message.author.username+" call me");
-        await message.channel.send("Oi to aqui");
+    }else if(call("jumperluko_bot") === true){
+        console.log(message.author.username+"#"+message.author.discriminator+" call me");
+        if(typeof callMeAgain === 'undefined'){
+            callMeAgain = [message.author.id];
+            await message.channel.send("Oi to aqui");
+        }else if(!callMeAgain.includes(message.author.id)){
+            await message.channel.send("Oi to aqui");
+        }else if(callMeAgain.includes(message.author.id)){
+            await message.channel.send("Olá estou aqui....");
+        }
+        
     }
 });
 
