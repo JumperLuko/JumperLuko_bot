@@ -31,13 +31,12 @@ client.on("message", async message =>{
     if(message.author.bot) return;
     // if (!message.guild) return;
 
-    console.log(message.member.roles.map(role => role.name.toString()).join(" || "));
     const command = (keyWord) => message.content.toLowerCase().startsWith(keyWord); // const command = message.content.slice(config.prefix.lenght).trim().split(/ +/g).shift().toLowerCase();
     function call(keyWord){return message.content.toLowerCase().includes(keyWord);}
 
     if(command("j!help")  || command("!help") || message.channel.type == "dm" && (command("help")|| command("ajuda"))){
         console.log(message.author.username+"#"+message.author.discriminator+" use !help");
-        await message.channel.send("j!calc p/ Cálculos \r\nj!ping p/ Pingar \r\nj!info p/ Informações");
+        await message.channel.send("j!ping p/ Pingar\r\nj!calc p/ Cálculos\r\nj!info p/ Informações\r\nj!role para informar roles");
     }else if(command("j!ping")) {
         console.log(message.author.username+"#"+message.author.discriminator+" use !help");
         if(message.channel.type != "dm") {await message.delete();};
@@ -96,7 +95,8 @@ client.on("message", async message =>{
             await message.channel.send("Aqui você pode calcular valores!");
         }
     }else if(command("j!info")){
-        if(!message.guild) {message.channel.send("Command para servidores");return;};
+        if(!message.guild) {message.channel.send("Command para servidores");console.log(message.author.username+"#"+message.author.discriminator+" try to use j!info");return;};
+        console.log(message.author.username+"#"+message.author.discriminator+" use j!info");
         let sicon = message.guild.iconURL;
         let serverembed = new Discord.RichEmbed()
         .setDescription("Informações do servidor")
@@ -108,6 +108,10 @@ client.on("message", async message =>{
         .addField("Total de pessoas", message.guild.memberCount);
         message.delete();
         return message.channel.send(serverembed);
+    }else if(command("j!role")){
+        if(!message.guild) {message.channel.send("Command para servidores");console.log(message.author.username+"#"+message.author.discriminator+" try to use j!role");return;}
+        console.log(message.author.username+"#"+message.author.discriminator+" use j!role");
+        await message.channel.send("Seus roles são: "+message.member.roles.map(role => role.name.toString()).join(" & "));
     }else if(call("jumperluko_bot")){
         console.log(message.author.username+"#"+message.author.discriminator+" call me");
         if(typeof callMeAgain === 'undefined'){
